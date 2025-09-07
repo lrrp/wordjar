@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from './components/Header';
-import { WordSelector } from './components/WordSelector';
+import { CompactHeader } from './components/CompactHeader';
+import { ConfigPanel } from './components/ConfigPanel';
 import { Flashcard } from './components/Flashcard';
-import { AddWordForm } from './components/AddWordForm';
 import { Word } from './types';
 import { getRandomWords } from './utils/wordSelection';
 import { saveWords, loadWords } from './utils/storage';
+import { parseCSV } from './utils/csvParser';
 import { initialWords } from './data/initialWords';
 
 function App() {
   const [words, setWords] = useState<Word[]>([]);
   const [selectedWords, setSelectedWords] = useState<Word[]>([]);
   const [wordCount, setWordCount] = useState(3);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showConfig, setShowConfig] = useState(true);
 
   // Load words from localStorage on mount
   useEffect(() => {
@@ -57,63 +57,81 @@ function App() {
     }
   };
 
-  const handleAddWord = (newWord: Word) => {
-    setWords(prev => [...prev, newWord]);
+  const handleAddWords = (newWords: Word[]) => {
+    setWords(prev => [...prev, ...newWords]);
+  };
+
+  const handleCSVUpload = (csvContent: string) => {
+    try {
+      const newWords = parseCSV(csvContent);
+      handleAddWords(newWords);
+      alert(`Successfully imported ${newWords.length} words!`);
+    } catch (error) {
+      alert(`Error importing CSV: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <CompactHeader
         totalWords={words.length}
         successCount={successCount}
-        onReset={handleReset}
-        onAddWord={() => setShowAddForm(true)}
+        remainingWords={remainingWords}
+        onToggleConfig={() => setShowConfig(!showConfig)}
+        showConfig={showConfig}
       />
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="space-y-8">
-          <WordSelector
+      <div className="max-w-6xl mx-auto px-4 py-4">
+        {showConfig && (
+          <ConfigPanel
             wordCount={wordCount}
             onWordCountChange={setWordCount}
             onSelectWords={handleSelectWords}
             remainingWords={remainingWords}
             isDisabled={selectedWords.length > 0}
+            onReset={handleReset}
+            onAddWords={handleAddWords}
+            onCSVUpload={handleCSVUpload}
           />
+        )}
 
-          {selectedWords.length > 0 && (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
-                Study These Words
+        {selectedWords.length > 0 && (
+          <div className="mt-6">
+            <div className="text-center mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Study Session ({selectedWords.length} words)
               </h2>
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
-                {selectedWords.map(word => (
-                  <Flashcard
-                    key={word.id}
-                    word={word}
-                    onDropBack={handleDropBack}
-                    onMarkSuccess={handleMarkSuccess}
-                  />
-                ))}
-              </div>
             </div>
-          )}
+            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {selectedWords.map(word => (
+                <Flashcard
+                  key={word.id}
+                  word={word}
+                  onDropBack={handleDropBack}
+                  onMarkSuccess={handleMarkSuccess}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
-          {selectedWords.length === 0 && remainingWords > 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">
-                Ready to study? Pick some words from the jar above!
-              </p>
+        {selectedWords.length === 0 && remainingWords > 0 && !showConfig && (
+          <div className="text-center py-8">
+            <p className="text-gray-600">
+              Click the settings icon to configure and start studying!
+            </p>
+          </div>
+        )}
+
+        {remainingWords === 0 && (
+          <div className="text-center py-12">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 max-w-md mx-auto">
+              <h3 className="text-lg font-semibold text-green-800 mb-2">🎉 Congratulations!</h3>
+              <p className="text-green-700">You've mastered all words!</p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-
-      {showAddForm && (
-        <AddWordForm
-          onAdd={handleAddWord}
-          onClose={() => setShowAddForm(false)}
-        />
-      )}
     </div>
   );
 }

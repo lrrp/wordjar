@@ -43,11 +43,11 @@ export const AddWordForm: React.FC<AddWordFormProps> = ({ onAdd, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
       <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
+        <div className="p-4">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Add New Word</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Add New Word</h2>
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -58,7 +58,7 @@ export const AddWordForm: React.FC<AddWordFormProps> = ({ onAdd, onClose }) => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="word" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="word" className="block text-xs font-medium text-gray-700 mb-1">
                 Word *
               </label>
               <input
@@ -73,7 +73,7 @@ export const AddWordForm: React.FC<AddWordFormProps> = ({ onAdd, onClose }) => {
             </div>
 
             <div>
-              <label htmlFor="pronunciation" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="pronunciation" className="block text-xs font-medium text-gray-700 mb-1">
                 Pronunciation
               </label>
               <input
@@ -87,7 +87,7 @@ export const AddWordForm: React.FC<AddWordFormProps> = ({ onAdd, onClose }) => {
             </div>
 
             <div>
-              <label htmlFor="meaning" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="meaning" className="block text-xs font-medium text-gray-700 mb-1">
                 Meaning *
               </label>
               <textarea
@@ -102,7 +102,7 @@ export const AddWordForm: React.FC<AddWordFormProps> = ({ onAdd, onClose }) => {
             </div>
 
             <div>
-              <label htmlFor="sentence" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="sentence" className="block text-xs font-medium text-gray-700 mb-1">
                 Example Sentence *
               </label>
               <textarea
@@ -117,7 +117,7 @@ export const AddWordForm: React.FC<AddWordFormProps> = ({ onAdd, onClose }) => {
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="category" className="block text-xs font-medium text-gray-700 mb-1">
                 Priority Category
               </label>
               <select

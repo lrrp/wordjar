@@ -43,7 +43,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <div className="relative h-80 perspective-1000">
         <div 
           className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d cursor-pointer ${
@@ -52,12 +52,12 @@ export const Flashcard: React.FC<FlashcardProps> = ({
           onClick={() => setIsFlipped(!isFlipped)}
         >
           {/* Front of card */}
-          <div className={`absolute inset-0 w-full h-full rounded-xl border-2 ${getCategoryColor(word.category)} backface-hidden shadow-lg`}>
+          <div className={`absolute inset-0 w-full h-full rounded-lg border-2 ${getCategoryColor(word.category)} backface-hidden shadow-md`}>
             <div className="p-6 h-full flex flex-col justify-center text-center">
               <div className="mb-4">
                 {getCategoryBadge(word.category)}
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 {word.word}
               </h3>
               <p className="text-gray-600 text-sm">
@@ -67,13 +67,13 @@ export const Flashcard: React.FC<FlashcardProps> = ({
           </div>
 
           {/* Back of card */}
-          <div className={`absolute inset-0 w-full h-full rounded-xl border-2 ${getCategoryColor(word.category)} backface-hidden shadow-lg rotate-y-180`}>
+          <div className={`absolute inset-0 w-full h-full rounded-lg border-2 ${getCategoryColor(word.category)} backface-hidden shadow-md rotate-y-180`}>
             <div className="p-6 h-full flex flex-col">
               <div className="flex-1">
                 <div className="mb-4">
                   {getCategoryBadge(word.category)}
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
                   {word.word}
                 </h3>
                 <p className="text-gray-600 text-sm mb-4">
@@ -81,12 +81,12 @@ export const Flashcard: React.FC<FlashcardProps> = ({
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">Meaning:</h4>
-                    <p className="text-gray-700">{word.meaning}</p>
+                    <h4 className="font-semibold text-gray-800 mb-1 text-sm">Meaning:</h4>
+                    <p className="text-gray-700 text-sm">{word.meaning}</p>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">Example:</h4>
-                    <p className="text-gray-700 italic">"{word.sentence}"</p>
+                    <h4 className="font-semibold text-gray-800 mb-1 text-sm">Example:</h4>
+                    <p className="text-gray-700 italic text-sm">"{word.sentence}"</p>
                   </div>
                 </div>
               </div>
@@ -96,20 +96,20 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-3 mt-6">
+      <div className="flex gap-2 mt-4">
         <button
           onClick={() => onDropBack(word)}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium"
+          className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm"
         >
           <RotateLeft className="w-4 h-4" />
-          Drop Back
+          <span className="hidden sm:inline">Drop Back</span>
         </button>
         <button
           onClick={() => onMarkSuccess(word)}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
+          className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium text-sm"
         >
           <Check className="w-4 h-4" />
-          Mark Success
+          <span className="hidden sm:inline">Success</span>
         </button>
       </div>
     </div>
