@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CompactHeader } from './components/CompactHeader';
-import { ConfigPanel } from './components/ConfigPanel';
+import { StudyTab } from './components/StudyTab';
+import { ConfigTab } from './components/ConfigTab';
 import { Flashcard } from './components/Flashcard';
 import { Word } from './types';
 import { getRandomWords } from './utils/wordSelection';
@@ -12,7 +13,7 @@ function App() {
   const [words, setWords] = useState<Word[]>([]);
   const [selectedWords, setSelectedWords] = useState<Word[]>([]);
   const [wordCount, setWordCount] = useState(3);
-  const [showConfig, setShowConfig] = useState(true);
+  const [activeTab, setActiveTab] = useState<'study' | 'config'>('study');
 
   // Load words from localStorage on mount
   useEffect(() => {
@@ -77,18 +78,23 @@ function App() {
         totalWords={words.length}
         successCount={successCount}
         remainingWords={remainingWords}
-        onToggleConfig={() => setShowConfig(!showConfig)}
-        showConfig={showConfig}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
       />
 
       <div className="max-w-6xl mx-auto px-4 py-4">
-        {showConfig && (
-          <ConfigPanel
+        {activeTab === 'study' && (
+          <StudyTab
             wordCount={wordCount}
             onWordCountChange={setWordCount}
             onSelectWords={handleSelectWords}
             remainingWords={remainingWords}
             isDisabled={selectedWords.length > 0}
+          />
+        )}
+
+        {activeTab === 'config' && (
+          <ConfigTab
             onReset={handleReset}
             onAddWords={handleAddWords}
             onCSVUpload={handleCSVUpload}
@@ -115,10 +121,10 @@ function App() {
           </div>
         )}
 
-        {selectedWords.length === 0 && remainingWords > 0 && !showConfig && (
+        {selectedWords.length === 0 && remainingWords > 0 && activeTab === 'study' && (
           <div className="text-center py-8">
             <p className="text-gray-600">
-              Click the settings icon to configure and start studying!
+              Select how many words to study and click "Pick Words" to start!
             </p>
           </div>
         )}
